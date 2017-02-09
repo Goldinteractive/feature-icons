@@ -16,7 +16,7 @@ See [demo page](demo/index.html).
 
 Install this package with sackmesser:
 
-    make feature-install icons
+    make feature-install-icons
 
 or when sackmesser is not used:
 
