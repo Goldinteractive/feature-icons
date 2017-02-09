@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/demo.css">
+  </head>
+  <body>
+
+    <h2>Normal Icons</h2>
+    <p>
+      Lorem ipsum dolor <svg data-feature="icon" data-icon="sackmesser"></svg> sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor <svg data-feature="icon" data-icon="company"></svg> invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <svg data-feature="icon" data-icon="user"></svg> At vero eos et accusam et justo duo dolores et ea rebum.
+    </p>
+
+    <h2>Wrapped Icons (for same width)</h2>
+    <ul>
+      <li><svg data-feature="icon" data-icon="sackmesser" data-wrap="1"></svg> Lorem ipsum dolor</li>
+      <li><svg data-feature="icon" data-icon="company" data-wrap="1"></svg> Lorem ipsum dolor</li>
+      <li><svg data-feature="icon" data-icon="user" data-wrap="1"></svg> Lorem ipsum dolor</li>
+    </ul>
+
+    <h2>Original Icon (width and height)</h2>
+    <p><svg data-feature="icon" data-icon="sackmesser" data-with-size="1"></svg></p>
+
+    <h2>Responsive Icon</h2>
+    <svg data-feature="icon" data-icon="sackmesser" data-responsive="1"></svg>
+
+    <script src="js/demo.bundle.js"></script>
+  </body>
+</html>
