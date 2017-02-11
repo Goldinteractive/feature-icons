@@ -1,6 +1,6 @@
 {
   "name": "gi-feature-icons",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fancy icons using a svg sprite file and use element.",
   "main": "lib/icons.js",
   "jsnext:main": "src/index.js",
