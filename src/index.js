@@ -1,4 +1,3 @@
-const HREF = window.location.href
 const USER_AGENT = navigator.userAgent
 const IE11_OR_OLDER = USER_AGENT.indexOf('MSIE ') > -1 || USER_AGENT.indexOf('Trident/') > -1
 
@@ -169,17 +168,22 @@ export class Icon extends base.features.Feature {
       throw new Error(`Icon "${this.id}" feature needs to be initialized with a IconManager instance!`)
     }
 
+    if (!this.id) {
+      console.error('No "data-icon" attribute defined', this.node)
+      return false
+    }
+
     var manager = this.options.manager
     var managerOpts = this.options.manager.options
 
-    this.responsive = this.node.getAttribute('data-responsive')
-    this.responsive = this.responsive !== null ? this.responsive : managerOpts.responsive
+    var responsive = this.node.getAttribute('data-responsive')
+    this.responsive = responsive !== null ? true : managerOpts.responsive
 
-    this.wrap = this.node.getAttribute('data-wrap')
-    this.wrap = this.wrap !== null ? this.wrap : managerOpts.wrap
+    var wrap = this.node.getAttribute('data-wrap')
+    this.wrap = wrap !== null ? true : managerOpts.wrap
 
-    this.withSize = this.node.getAttribute('data-with-size')
-    this.withSize = this.withSize !== null ? this.withSize : managerOpts.withSize
+    var withSize = this.node.getAttribute('data-with-size')
+    this.withSize = withSize !== null ? true : managerOpts.withSize
 
     var attributes = manager.getIconFromData(this.id).attributes
     var $iconNodes = manager.getIconFromSprite(this.id).childNodes
@@ -248,8 +252,9 @@ export class Icon extends base.features.Feature {
 
       this.polyfilled = true
     } else {
+      var currentHref = window.location.href
       var $use = document.createElementNS(NS_SVG, 'use')
-      $use.setAttributeNS(NS_XLINK, 'href', `${HREF}#${managerOpts.prefixId}${this.id}`)
+      $use.setAttributeNS(NS_XLINK, 'href', `${currentHref}#${managerOpts.prefixId}${this.id}`)
       this.node.appendChild($use)
     }
   }

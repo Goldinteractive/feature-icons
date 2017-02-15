@@ -22,16 +22,19 @@ p, ul {
   display: inline-block;
   display: inline-flex;
   align-self: center;
-  vertical-align: top; }
-  .icon-svg:not([width]):not([height]) {
-    height: 1em; }
+  vertical-align: top;
+  height: 1em; }
+  .icon-svg[data-with-size] {
+    width: initial;
+    height: initial; }
 
 .icon-box {
   position: relative;
   width: 1.1em;
   height: 1em;
   display: inline-flex;
-  align-self: center; }
+  align-self: center;
+  vertical-align: top; }
   .icon-box > .icon-svg {
     display: block;
     width: 100%;

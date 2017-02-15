@@ -551,7 +551,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
       window.setTimeout(callback, 1000 / 60);
     };
-  }();
+  }().bind(window);
 });
 
 /***/ }),
@@ -2532,7 +2532,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
   }();
 
-  var HREF = window.location.href;
   var USER_AGENT = navigator.userAgent;
   var IE11_OR_OLDER = USER_AGENT.indexOf('MSIE ') > -1 || USER_AGENT.indexOf('Trident/') > -1;
 
@@ -2621,23 +2620,23 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       /**
        * Return metadata of given icon.
        *
-       * @param  {String} iconId - Icon id to return metadata from.
-       * @return {Object}
+       * @param   {String} iconId - Icon id to return metadata from.
+       * @returns {Object}
        */
 
     }, {
       key: 'getIconFromData',
       value: function getIconFromData(iconId) {
-        var iconData = this.iconsData['icons'][iconId];
+        var iconData = this.iconsData.icons[iconId];
         if (!iconData) throw new Error('No icon "' + iconId + '" found in icon json data file "' + this.options.svgJsonFile + '"!');
-        return this.iconsData['icons'][iconId];
+        return this.iconsData.icons[iconId];
       }
 
       /**
        * Return svg element from sprite.
        *
-       * @param  {String} iconId - Icon id of the element to return.
-       * @return {Element}
+       * @param   {String} iconId - Icon id of the element to return.
+       * @returns {Element}
        */
 
     }, {
@@ -2653,8 +2652,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
        * Needed to polyfill icons on IE11 on windows 8 (displays weird crispy icons when "use" element is used).
        *
        * @private
-       * @param  {Element} $icon SVG element
-       * @return {Boolean}
+       * @param   {Element} $icon SVG element
+       * @returns {Boolean}
        */
 
     }, {
@@ -2742,19 +2741,24 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           throw new Error('Icon "' + this.id + '" feature needs to be initialized with a IconManager instance!');
         }
 
+        if (!this.id) {
+          console.error('No "data-icon" attribute defined', this.node);
+          return false;
+        }
+
         var manager = this.options.manager;
         var managerOpts = this.options.manager.options;
 
-        this.responsive = this.node.getAttribute('data-responsive');
-        this.responsive = this.responsive !== null ? this.responsive : managerOpts.responsive;
+        var responsive = this.node.getAttribute('data-responsive');
+        this.responsive = responsive !== null ? true : managerOpts.responsive;
 
-        this.wrap = this.node.getAttribute('data-wrap');
-        this.wrap = this.wrap !== null ? this.wrap : managerOpts.wrap;
+        var wrap = this.node.getAttribute('data-wrap');
+        this.wrap = wrap !== null ? true : managerOpts.wrap;
 
-        this.withSize = this.node.getAttribute('data-with-size');
-        this.withSize = this.withSize !== null ? this.withSize : managerOpts.withSize;
+        var withSize = this.node.getAttribute('data-with-size');
+        this.withSize = withSize !== null ? true : managerOpts.withSize;
 
-        var attributes = manager.getIconFromData(this.id)['attributes'];
+        var attributes = manager.getIconFromData(this.id).attributes;
         var $iconNodes = manager.getIconFromSprite(this.id).childNodes;
 
         var width = attributes.width ? parseFloat(attributes.width) : null;
@@ -2813,8 +2817,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
           this.polyfilled = true;
         } else {
+          var currentHref = window.location.href;
           var $use = document.createElementNS(NS_SVG, 'use');
-          $use.setAttributeNS(NS_XLINK, 'href', HREF + '#' + managerOpts.prefixId + this.id);
+          $use.setAttributeNS(NS_XLINK, 'href', currentHref + '#' + managerOpts.prefixId + this.id);
           this.node.appendChild($use);
         }
       }
