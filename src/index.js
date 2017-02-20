@@ -13,7 +13,7 @@ const NS_XLINK = 'http://www.w3.org/1999/xlink'
 export class IconManager {
 
   constructor(options) {
-    this.options = base.utils.object.extend({}, IconManager.defaultOptions, options)
+    this.options = Object.assign({}, IconManager.defaultOptions, options)
 
     if (!this.options.svgJsonFile) {
       throw new Error('No SVG json data file given!')
