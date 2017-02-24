@@ -12,7 +12,7 @@ $icons-baseline-fix: -0.125em !default;
     display: inline-block;
     display: inline-flex;
     align-self: center;
-    vertical-align: top;
+    vertical-align: baseline;
     height: $icons-height;
 
     &[data-with-size] {
@@ -27,7 +27,7 @@ $icons-baseline-fix: -0.125em !default;
     height: $icons-height;
     display: inline-flex;
     align-self: center;
-    vertical-align: top;
+    vertical-align: baseline;
 
     > .icon-svg {
         display: block;
