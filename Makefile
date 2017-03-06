@@ -20,9 +20,9 @@ JSDOC_CONFIG=$(CONFIG_PATH)/jsdoc.json
 SOURCE_PATH=./src
 LIBRARY_PATH=./lib
 ASSETS_PATH=./assets
-DOCS_PATH=./docs
+DOCS_PATH=./jsdoc
 
-DEV_PATH=./demo
+DEV_PATH=./docs
 DEV_CSS_PATH=$(DEV_PATH)/css
 DEV_JS_PATH=$(DEV_PATH)/js
 
