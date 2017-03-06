@@ -2,8 +2,6 @@
 
 Fancy icons using a svg sprite file and `use` element with polyfill for IE11 and below.
 
-![demo](demo/example.png)
-
 ### Usage
 
 See [demo page](demo/index.html).
