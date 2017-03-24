@@ -246,7 +246,7 @@ export class Icon extends base.features.Feature {
       this.polyfilled = true
     } else {
       // create use element to use svg from sprite
-      var currentHref = window.location.href
+      var currentHref = '//' + window.location.host + window.location.pathname + window.location.search
       var $use = document.createElementNS(NS_SVG, 'use')
       $use.setAttributeNS(NS_XLINK, 'href', `${currentHref}#${managerOpts.prefixId}${this.id}`)
       $icon.appendChild($use)

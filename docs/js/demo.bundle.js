@@ -5844,7 +5844,8 @@ exports.clearImmediate = clearImmediate;
           this.polyfilled = true;
         } else {
           // create use element to use svg from sprite
-          var currentHref = window.location.href;
+          var currentHref = '//' + window.location.host + window.location.pathname + window.location.search;
+          console.log(currentHref);
           var $use = document.createElementNS(NS_SVG, 'use');
           $use.setAttributeNS(NS_XLINK, 'href', currentHref + '#' + managerOpts.prefixId + this.id);
           $icon.appendChild($use);
