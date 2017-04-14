@@ -246,13 +246,28 @@ export class Icon extends base.features.Feature {
       this.polyfilled = true
     } else {
       // create use element to use svg from sprite
-      var currentHref = '//' + window.location.host + window.location.pathname + window.location.search
-      var $use = document.createElementNS(NS_SVG, 'use')
-      $use.setAttributeNS(NS_XLINK, 'href', `${currentHref}#${managerOpts.prefixId}${this.id}`)
-      $icon.appendChild($use)
+      this.$use = document.createElementNS(NS_SVG, 'use')
+      this.updateUseLink()
+
+      // change link of use tag if state has changed
+      this.onHub('statechange', () => {
+        this.updateUseLink()
+      })
+
+      this.onHub('icons:update', () => {
+        this.updateUseLink()
+      })
+
+      $icon.appendChild(this.$use)
     }
 
     this.replaceNode($icon)
+  }
+
+  updateUseLink() {
+    if (!this.$use) return
+    var currentHref = '//' + window.location.host + window.location.pathname + window.location.search
+    this.$use.setAttributeNS(NS_XLINK, 'href', `${currentHref}#${this.options.manager.options.prefixId}${this.id}`)
   }
 
 }
