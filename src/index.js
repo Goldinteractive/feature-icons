@@ -161,14 +161,6 @@ export class Icon extends base.features.Feature {
     var width = attributes.width ? parseFloat(attributes.width) : null
     var height = attributes.height ? parseFloat(attributes.height) : null
 
-    if (!width) {
-      console.info(`Default width taken for "${this.id}" icon.`, $icon)
-    }
-
-    if (!height) {
-      console.info(`Default height taken for "${this.id}" icon.`, $icon)
-    }
-
     // take over node attributes to icon
     for (let attribute in this.node.attributes) {
       if (attributes.hasOwnProperty(attribute)) {

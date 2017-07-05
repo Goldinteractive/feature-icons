@@ -6169,6 +6169,10 @@ exports.clearImmediate = clearImmediate;
             _this4.updateUseLink();
           });
 
+          this.onHub('icons:update', function () {
+            _this4.updateUseLink();
+          });
+
           $icon.appendChild(this.$use);
         }
 
