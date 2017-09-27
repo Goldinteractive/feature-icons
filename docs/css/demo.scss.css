@@ -32,6 +32,7 @@ p, ul {
   display: inline-flex;
   align-self: center;
   user-select: none;
+  max-width: 100%;
   bottom: -0.125em; }
   .icon-box > .icon-canvas {
     display: block;

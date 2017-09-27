@@ -6005,7 +6005,6 @@ exports.clearImmediate = clearImmediate;
    * @property {String}  [prefixClass='-icon-'] - Prefix used for the icon classes.
    * @property {String}  [iconClass='icon-svg'] - Class used for icons.
    * @property {String}  [wrapClass='icon-box'] - Class used for wrapper.
-   * @property {String}  [wrapElement='span'] - Element tag used for wrapper.
    * @property {Boolean} [responsive=false] - Whether the icons should be responsive by default.
    * @property {String}  [responsiveClass='-responsive'] - Class used for responsive icons.
    * @property {Number}  [width=200] - Default width when original is used if no width has been defined.
@@ -6020,7 +6019,7 @@ exports.clearImmediate = clearImmediate;
     prefixClass: '-icon-',
     iconClass: 'icon-svg',
     wrapClass: 'icon-box',
-    wrapElement: 'span',
+    accessible: false,
     responsive: false,
     responsiveClass: '-responsive',
     width: 200,
@@ -6057,8 +6056,7 @@ exports.clearImmediate = clearImmediate;
           return false;
         }
 
-        var $icon = document.createElementNS(NS_SVG, 'svg');
-        var $parent = this.node.parentElement;
+        var $icon = this.node.querySelector('svg') || document.createElementNS(NS_SVG, 'svg');
 
         var manager = this.options.manager;
         var managerOpts = this.options.manager.options;
@@ -6068,6 +6066,9 @@ exports.clearImmediate = clearImmediate;
 
         var equal = this.node.getAttribute('data-equal');
         this.equal = equal !== null ? true : managerOpts.equal;
+
+        var accessible = this.node.getAttribute('data-accessible');
+        this.accessible = accessible !== null ? true : managerOpts.accessible;
 
         var original = this.node.getAttribute('data-original');
         this.original = original !== null ? true : managerOpts.original;
@@ -6080,29 +6081,17 @@ exports.clearImmediate = clearImmediate;
           return false;
         }
 
+        $icon.setAttribute('role', 'img');
+        $icon.setAttribute('aria-hidden', this.accessible ? 'false' : 'true');
+
         var width = attributes.width ? parseFloat(attributes.width) : null;
         var height = attributes.height ? parseFloat(attributes.height) : null;
 
-        if (!width) {
-          console.info('Default width taken for "' + this.id + '" icon.', $icon);
-        }
-
-        if (!height) {
-          console.info('Default height taken for "' + this.id + '" icon.', $icon);
-        }
-
-        // take over node attributes to icon
-        for (var attribute in this.node.attributes) {
-          if (attributes.hasOwnProperty(attribute)) {
-            $icon.setAttribute(attribute, attributes[attribute]);
-          }
-        }
-
         // take over original attributes
-        for (var _attribute in attributes) {
-          if (attributes.hasOwnProperty(_attribute)) {
-            if (_attribute != 'width' && _attribute != 'height' || this.original) {
-              $icon.setAttribute(_attribute, attributes[_attribute]);
+        for (var attribute in attributes) {
+          if (attributes.hasOwnProperty(attribute)) {
+            if (attribute != 'width' && attribute != 'height' || this.original) {
+              $icon.setAttribute(attribute, attributes[attribute]);
             }
           }
         }
@@ -6110,46 +6099,32 @@ exports.clearImmediate = clearImmediate;
         // using setAttribute because ie11 and below doesn't support classList or setting className on svg
         $icon.setAttribute('class', managerOpts.iconClass + ' ' + managerOpts.prefixClass + this.id);
 
-        if ($parent.nodeName.toLowerCase() == managerOpts.wrapElement && $parent.classList.contains(managerOpts.wrapClass)) {
-          // use parent node as wrap
-          this.$wrap = $parent;
-        } else {
-          var $next = this.node.nextSibling;
-
-          this.$wrap = document.createElement(managerOpts.wrapElement);
-          this.$wrap.classList.add(managerOpts.wrapClass);
-          this.$wrap.classList.add(managerOpts.prefixClass + this.id);
-          this.$wrap.appendChild(this.node);
-
-          if ($next) {
-            $parent.insertBefore(this.$wrap, $next);
-          } else {
-            $parent.appendChild(this.$wrap);
-          }
-        }
+        this.node.classList.add(managerOpts.wrapClass);
+        this.node.classList.add(managerOpts.prefixClass + this.id);
 
         // set classes and attributes based on settings
         if (this.original) {
-          this.$wrap.classList.add('-original');
-          this.$wrap.style.width = width + 'px';
-          this.$wrap.style.height = height + 'px';
+          this.node.classList.add('-original');
+          this.node.style.width = width + 'px';
+          this.node.style.height = height + 'px';
         }
 
         if (this.equal) {
-          this.$wrap.classList.add('-equal');
+          this.node.classList.add('-equal');
         }
 
         if (this.responsive) {
           var ratioPadding = height / width * 100;
-          this.$wrap.style.paddingBottom = ratioPadding + '%';
-          this.$wrap.classList.add(managerOpts.responsiveClass);
+          this.node.style.paddingBottom = ratioPadding + '%';
+          this.node.classList.add(managerOpts.responsiveClass);
         } else {
           // using to keep svg ratio for ie (http://nicolasgallagher.com/canvas-fix-svg-scaling-in-internet-explorer/)
           var $canvas = document.createElement('canvas');
           $canvas.classList.add('icon-canvas');
           $canvas.setAttribute('width', width);
           $canvas.setAttribute('height', height);
-          this.$wrap.appendChild($canvas);
+          $canvas.setAttribute('aria-hidden', 'true');
+          this.node.appendChild($canvas);
         }
 
         if (IE11_OR_OLDER) {
@@ -6176,14 +6151,16 @@ exports.clearImmediate = clearImmediate;
           $icon.appendChild(this.$use);
         }
 
-        this.replaceNode($icon);
+        this.node.appendChild($icon);
       }
     }, {
       key: 'updateUseLink',
       value: function updateUseLink() {
         if (!this.$use) return;
-        var currentHref = '//' + window.location.host + window.location.pathname + window.location.search;
-        this.$use.setAttributeNS(NS_XLINK, 'href', currentHref + '#' + this.options.manager.options.prefixId + this.id);
+        var currentDomain = '//' + window.location.host + window.location.pathname + window.location.search;
+        var currentHash = currentDomain + '#' + this.options.manager.options.prefixId + this.id;
+        this.$use.setAttribute('href', currentHash);
+        this.$use.setAttributeNS(NS_XLINK, 'xlink:href', currentHash);
       }
     }]);
 
